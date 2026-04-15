@@ -1,12 +1,12 @@
 import { CheckCircle2, Mail, Copy, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
-export function SuccessScreen() {
+export function SuccessScreen({ referenceNo }: { referenceNo: string }) {
   const [copied, setCopied] = useState(false);
-  const jobId = "BUILD-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  
 
   const copyJobId = () => {
-    navigator.clipboard.writeText(jobId);
+    navigator.clipboard.writeText(referenceNo);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -34,7 +34,7 @@ export function SuccessScreen() {
             </label>
             <div className="flex items-center gap-2">
               <code className="flex-1 px-4 py-3 bg-slate-50 rounded-lg border border-slate-200 font-mono text-slate-900">
-                {jobId}
+                {referenceNo}
               </code>
               <button
                 onClick={copyJobId}

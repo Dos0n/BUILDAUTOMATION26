@@ -12,6 +12,7 @@ import {
   Settings, 
   AlertCircle 
 } from "lucide-react";
+import { submitIntake } from "../../lib/submitIntake";
 
 const SECTIONS = [
   { id: 1, title: "Organization & Contact", icon: Building2 },
@@ -26,6 +27,9 @@ export function IntakeForm() {
   const [currentSection, setCurrentSection] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [referenceNo, setReferenceNo] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     // Section 1
     organizationName: "",
@@ -70,7 +74,6 @@ export function IntakeForm() {
   // Auto-save functionality
   useEffect(() => {
     const interval = setInterval(() => {
-      // Simulate auto-save
       setLastSaved(new Date());
       console.log("Draft auto-saved");
     }, 60000);
@@ -92,21 +95,37 @@ export function IntakeForm() {
     }
   };
 
-  const handleSubmit = () => {
-    // Simulate form submission
-    console.log("Form submitted:", formData);
-    setIsSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const result = await submitIntake({
+        project_name: formData.organizationName,
+        client_name: formData.primaryContactName,
+        client_email: formData.primaryContactEmail,
+        budget: "",
+        features: formData.features,
+        team_size: "",
+        start_date: "",
+        notes: formData.additionalInfo,
+      });
+      setReferenceNo(result.reference_no);
+      setIsSubmitted(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSaveDraft = () => {
     setLastSaved(new Date());
-    // In a real app, this would save to the server
     console.log("Draft saved manually");
   };
 
   if (isSubmitted) {
-    return <SuccessScreen />;
+    return <SuccessScreen referenceNo={referenceNo} />;
   }
 
   return (
@@ -144,7 +163,12 @@ export function IntakeForm() {
           onPrevious={handlePrevious}
           onNext={handleNext}
           onSubmit={handleSubmit}
+          isSubmitting={submitting}
         />
+
+        {submitError && (
+          <p className="text-red-500 text-sm text-center mt-2">{submitError}</p>
+        )}
       </div>
     </div>
   );
