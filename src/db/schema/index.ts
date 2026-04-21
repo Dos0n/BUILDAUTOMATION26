@@ -1,4 +1,5 @@
 export * from './assets';
+export * from './auth';
 export * from './cost-logs';
 export * from './deployments';
 export * from './intake-jobs';
