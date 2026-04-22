@@ -1,4 +1,4 @@
-import { numeric, pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
+import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { intakeJobs } from './intake-jobs';
 import { users } from './users';
 

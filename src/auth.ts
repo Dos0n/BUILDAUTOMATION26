@@ -34,6 +34,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  secret: process.env.AUTH_SECRET,
   callbacks: {
     jwt({ token, user }) {
       if (user) token.role = (user as { role: UserRole }).role

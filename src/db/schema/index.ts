@@ -3,6 +3,7 @@ export * from './auth';
 export * from './cost-logs';
 export * from './deployments';
 export * from './intake-jobs';
+export * from './intake-submissions';
 export * from './job-stages';
 export * from './organizations';
 export * from './relations';
